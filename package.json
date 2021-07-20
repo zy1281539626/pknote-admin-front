@@ -17,6 +17,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "echarts": "^5.1.2",
     "element-plus": "^1.0.2-beta.55",
     "vue": "^3.0.5",
     "vue-router": "4",
