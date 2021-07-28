@@ -1,20 +1,59 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/home.vue'
 import User from '@/views/user/index.vue'
 import UserDetail from '@/views/user/details/index.vue'
 
-const routes = [
+import lesson from './modules/lesson'
+
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: Home
+    redirect: '/home'
   },
   {
-    path: '/user',
-    component: User
+    path: '/home',
+    component: Home,
+    children: [
+      // 概览
+      {
+        path: '/overview',
+        component: () => import('@/views/overview.vue')
+      },
+      // 我的内容
+      {
+        path: '/content/my-content',
+        component: () => import('@/views/content-management/my-content.vue')
+      },
+      // 我的用户
+      {
+        path: '/user',
+        component: User
+      },
+      // 用户详情
+      {
+        path: '/user-detail',
+        component: UserDetail
+      }
+    ]
   },
+  ...lesson,
   {
-    path: '/user-detail',
-    component: UserDetail
+    path: '/learn-management',
+    name: 'LearnManagement',
+    component: () => import('@/views/learn-management/index.vue'),
+    redirect: '/learn-management/clock-in',
+    children: [
+      {
+        path: 'clock-in',
+        name: 'ClockIn',
+        component: () => import('@/views/learn-management/clock-in.vue')
+      },
+      {
+        path: 'learn-plan',
+        name: 'LearnPlan',
+        component: () => import('@/views/learn-management/learn-plan.vue')
+      }
+    ]
   }
 ]
 
