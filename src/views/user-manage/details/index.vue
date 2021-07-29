@@ -107,6 +107,7 @@
     color: #333;
     font-size: 20px;
     font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    background: #fff;
 
     .info-title {
       display: flex;
@@ -185,6 +186,7 @@
   .user-details {
     padding: 24px;
     font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    background: #fff;
 
     :deep(.el-tabs__item) {
       font-size: 18px;

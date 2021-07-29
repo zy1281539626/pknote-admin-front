@@ -1,9 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/home.vue'
-import User from '@/views/user/index.vue'
-import UserDetail from '@/views/user/details/index.vue'
-
 import lesson from './modules/lesson'
+import user from './modules/user'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,16 +22,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/content/my-content',
         component: () => import('@/views/content-management/my-content.vue')
       },
-      // 我的用户
-      {
-        path: '/user',
-        component: User
-      },
-      // 用户详情
-      {
-        path: '/user-detail',
-        component: UserDetail
-      }
+      ...user
     ]
   },
   ...lesson,

@@ -1,0 +1,128 @@
+.user-container {
+  padding: 24px;
+  margin-top: 48px 114px 64px 64px;
+  background-color: #fff;
+  font-family: 'Microsoft YaHei, Microsoft YaHei-Regular';
+
+  .info-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      margin-right: 12px;
+      background: #2590f9;
+      border-radius: 2px;
+    }
+  }
+
+  .statistics-card {
+    display: flex;
+    margin-bottom: 30px;
+    .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 172px;
+      text-align: center;
+      background-color: #f8f9fb;
+      .card-title {
+        color: #999;
+        font-size: 24px;
+        font-family: PingFang, PingFang-SC-Medium;
+        font-weight: SC-Medium;
+        margin-bottom: 20px;
+      }
+      .card-value {
+        font-size: 40px;
+        font-family: PingFang, PingFang-SC-Bold;
+        font-weight: SC-Bold;
+        color: #333333;
+      }
+    }
+  }
+
+  .export-user-btn {
+    float: right;
+    margin-top: 4px;
+  }
+
+  .user-table {
+    width: 100%;
+
+    .user-detail-scope {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      padding: 0 25px;
+
+      .user-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        margin-right: 12px;
+      }
+      .tags {
+        text-align: left;
+      }
+      .username {
+        font-size: 18px;
+        color: #333;
+        margin-right: 4px;
+      }
+      .el-tag {
+        padding: 3px 7px;
+        margin: 0 4px;
+        color: #999;
+        font-size: 12px;
+        border-radius: 11px;
+        border: 1px solid #999;
+        height: auto;
+        line-height: normal;
+        cursor: default;
+        background: transparent;
+      }
+      .identify-tag.el-tag {
+        margin-bottom: 5px;
+        color: #2b9afa;
+        border-color: #2b9afa;
+      }
+      .membership-time {
+        font-size: 14px;
+        color: #666;
+        text-align: left;
+      }
+    }
+  }
+
+  :deep(.is-left) {
+    text-align: left !important;
+    padding: 0 10px !important;
+  }
+
+  :deep(.el-table__header tr th) {
+    height: 48px;
+    padding: 0;
+    text-align: center;
+  }
+  :deep(.el-table__body tr td) {
+    height: 120px;
+    padding: 0;
+    text-align: center;
+  }
+  :deep(.el-button + .el-button) {
+    margin-left: 0;
+  }
+  :deep(.el-button--text) {
+    font-size: 16px;
+  }
+  :deep(.el-table .cell) {
+    padding: 0;
+  }
+}

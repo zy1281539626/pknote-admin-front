@@ -52,10 +52,12 @@ export default [
         path: '/user'
       },
       {
-        title: '用户评论'
+        title: '用户评论',
+        path: '/user-comments'
       },
       {
-        title: '用户私信'
+        title: '用户私信',
+        path: '/user-messages'
       }
     ]
   },
