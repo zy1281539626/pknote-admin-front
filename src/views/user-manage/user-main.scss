@@ -99,30 +99,45 @@
         text-align: left;
       }
     }
+    .action-btns button:not(:first-child) {
+      border-left: 1px solid #2b9afa;
+      margin-left: 3px;
+      padding-left: 4px;
+    }
+    :deep(td.is-left) {
+      text-align: left !important;
+      padding: 0 10px !important;
+    }
+    :deep(.el-table__header tr th) {
+      height: 48px;
+      padding: 0;
+      text-align: center;
+    }
+    :deep(.el-table__body tr td) {
+      height: 120px;
+      padding: 0;
+      text-align: center;
+    }
+    :deep(.el-button + .el-button) {
+      margin-left: 0;
+    }
+    :deep(.el-button--text) {
+      padding: 0;
+      font-size: 16px;
+      min-height: auto;
+    }
+    :deep(.el-table .cell) {
+      padding: 0;
+    }
   }
 
-  :deep(.is-left) {
-    text-align: left !important;
-    padding: 0 10px !important;
-  }
-
-  :deep(.el-table__header tr th) {
-    height: 48px;
-    padding: 0;
-    text-align: center;
-  }
-  :deep(.el-table__body tr td) {
-    height: 120px;
-    padding: 0;
-    text-align: center;
-  }
-  :deep(.el-button + .el-button) {
-    margin-left: 0;
-  }
-  :deep(.el-button--text) {
-    font-size: 16px;
-  }
-  :deep(.el-table .cell) {
-    padding: 0;
+  .batch-actions {
+    margin-top: 16px;
+    .select-all-btn {
+      margin-right: 24px;
+    }
+    :deep(.el-button + .el-button) {
+      margin-left: 16px;
+    }
   }
 }

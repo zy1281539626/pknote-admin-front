@@ -11,8 +11,8 @@
         <div class="card-value">100</div>
       </div>
     </div>
-    <div class="info-title">用户列表</div>
 
+    <div class="info-title">用户列表</div>
     <el-form :inline="true" :model="formInline">
       <el-form-item label="用户搜索">
         <el-input
@@ -68,15 +68,14 @@
         -
         <el-input v-model="formInline.amtTo" size="small" style="width: 120px"></el-input>
       </el-form-item>
-
       <el-form-item>
-        <el-button type="primary" size="small" @click="onSubmit">筛选</el-button>
+        <el-button type="primary" size="small" @click="handleSearch">筛选</el-button>
         <el-button size="small" style="margin-left: 8px">重置</el-button>
       </el-form-item>
       <el-button type="primary" size="small" class="export-user-btn">导出用户</el-button>
     </el-form>
 
-    <el-table :data="tableData" border class="user-table">
+    <el-table ref="userTable" :data="tableData" border class="user-table">
       <el-table-column type="selection" width="48"> </el-table-column>
       <el-table-column type="index" label="序列" width="80"> </el-table-column>
       <el-table-column label="用户" width="400">
@@ -86,14 +85,12 @@
             <div class="info">
               <div class="tags">
                 <span class="username">{{ scope.row.user.name }}</span>
-                <el-tag v-if="scope.row.user.identify" class="identify-tag">{{
-                  scope.row.user.identify
+                <el-tag v-for="tag in scope.row.user.identify" :key="tag" class="identify-tag">{{
+                  tag
                 }}</el-tag>
                 <el-tag v-for="tag in scope.row.user.tags" :key="tag">{{ tag }}</el-tag>
               </div>
-              <div class="membership-time">
-                会员到期：{{ scope.row.user.membershipExpiration }}
-              </div>
+              <div class="membership-time">会员到期：{{ scope.row.user.membershipExpiration }}</div>
             </div>
           </div>
         </template>
@@ -101,40 +98,60 @@
       <el-table-column prop="telephone" label="手机号" width="174"> </el-table-column>
       <el-table-column prop="socre" label="可用学分" width="120"> </el-table-column>
       <el-table-column prop="loginTime" label="登录时间" width="240"> </el-table-column>
-      <el-table-column prop="consume" label="消费金额(元)"> </el-table-column>
+      <el-table-column prop="consume" label="消费金额(元)" width="212"> </el-table-column>
       <el-table-column fixed="right" label="操作" width="214">
-        <template #default="scope" class="action-btns">
-          <el-button type="text" size="small" @click="handleClick(scope.row)">详情 | </el-button>
-          <el-button type="text" size="small">发消息 | </el-button>
-          <el-button type="text" size="small">拉黑 | </el-button>
-          <el-button type="text" size="small">贴标签</el-button>
+        <template #default="scope">
+          <div class="action-btns">
+            <el-button type="text" size="small" @click="handleGoDetail(scope.row)">详情</el-button>
+            <el-button type="text" size="small">发消息</el-button>
+            <el-button type="text" size="small">拉黑</el-button>
+            <el-button type="text" size="small">贴标签</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="batch-actions">
+      <el-checkbox v-model="selectAll" class="select-all-btn" @change="handleToggleSelect"
+        >全选</el-checkbox
+      >
+      <el-button size="mini">发消息</el-button>
+      <el-button size="mini">贴标签</el-button>
+      <el-button size="mini">拉黑</el-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-  export default {
+  import { defineComponent, reactive, toRefs } from 'vue'
+  import { useRouter } from 'vue-router'
+  export default defineComponent({
     name: 'User',
-    data() {
-      return {
+    setup() {
+      const router = useRouter()
+
+      /**
+       * data 搜索条件
+       */
+      const datas = reactive({
+        // 搜索条件
         formInline: {
-          user: '',
-          tag: '',
-          identity: '',
-          regTimeStart: '',
-          regTimeEnd: '',
-          amtFrom: '',
-          amtTo: ''
+          user: '', // 用户名 input
+          tag: '', // 标签名称 select
+          identity: '', // 用户身份 select
+          regTimeStart: '', // 注册开始时间 datepicker
+          regTimeEnd: '', // 注册结束时间 datepicker
+          amtFrom: '', // 消费金额最小 input
+          amtTo: '' // 消费金额最大 input
         },
+        // 表格数据
         tableData: [
           {
             order: 1,
             user: {
               name: '酱酱',
               avatar: 'https://z3.ax1x.com/2021/07/29/WHLceH.png',
-              identify: '普通会员',
+              identify: ['管理员'],
               tags: ['前端大牛', '技术狂'],
               membershipExpiration: '2020/04/20 22:30:00'
             },
@@ -148,7 +165,7 @@
             user: {
               name: '酱酱',
               avatar: 'https://z3.ax1x.com/2021/07/29/WHLceH.png',
-              identify: '普通会员',
+              identify: ['普通会员'],
               tags: ['前端大牛', '技术狂'],
               membershipExpiration: '2020/04/20 22:30:00'
             },
@@ -157,19 +174,38 @@
             loginTime: '2022/04/20 22:33:00',
             consume: 100
           }
-        ]
-      }
-    },
-    methods: {
-      handleClick(row: Object) {
-        console.log(row)
-        this.$router.push('/user-detail')
-      },
-      onSubmit() {
-        console.log('submit!')
+        ],
+        // 是否全选
+        selectAll: false
+      })
+
+      /**
+       * handles
+       */
+      const handles = reactive({
+        // 跳转到用户详情页
+        handleGoDetail(row: Object) {
+          console.log(row)
+          router.push('/user-detail')
+        },
+        // 搜索
+        handleSearch() {
+          console.log('submit!')
+        },
+        // 表格当页数据全选
+        handleToggleSelect() {
+          console.log(111)
+          // TODO: 全选联动
+          // userTable.value.toggleAllSelection()
+        }
+      })
+
+      return {
+        ...toRefs(datas),
+        ...toRefs(handles)
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
